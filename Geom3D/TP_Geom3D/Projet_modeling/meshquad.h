@@ -83,6 +83,8 @@ public:
 	 */
     void add_quad(int i1, int i2, int i3, int i4);
 
+
+
 	/**
 	 * @brief convertit les indices de quads en indices de triangles
 	 * @param quads tableau d'indices des quads [in]
