@@ -301,9 +301,14 @@ bool MeshQuad::intersect_ray_quad(const Vec3& P, const Vec3& Dir, int q, Vec3& i
     Vec3 p4 = m_points(i3);
 
 	// calcul de l'equation du plan (N+d)
+    Vec3 N = normal_of_quad(p1,p2,p3,p4);
+    float d = N.x * p1.x + N.y * p1.y + N.z * p1.z;
 
 	// calcul de l'intersection rayon plan
 	// I = P + alpha*Dir est dans le plan => calcul de alpha
+    float alpha = 1;
+    Vec3 I = P + alpha*Dir;
+
 
 	// alpha => calcul de I
 
