@@ -7,6 +7,8 @@
 
 #include <matrices.h>
 
+#include <QDebug>
+
 
 class MeshQuad
 {
