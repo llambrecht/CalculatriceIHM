@@ -96,11 +96,30 @@ void Viewer::keyPressEvent(QKeyEvent *event)
 			// Attention ctrl c utilise pour screen-shot !
 			if (!(event->modifiers() & Qt::ControlModifier))
 				m_mesh.create_cube();
+
 		break;
 
-			// e extrusion
-			// +/- decale
-			// z/Z shrink
+        case Qt::Key_E:
+            if(!(event->modifiers() & Qt::ControlModifier) && m_selected_quad != -1)
+                m_mesh.extrude_quad(m_selected_quad);
+        break;
+
+        case Qt::Key_Plus:
+            if(!(event->modifiers() & Qt::ControlModifier) && m_selected_quad != -1)
+                m_mesh.decale_quad(m_selected_quad, 1.0);
+        break;
+
+        case Qt::Key_Minus:
+            if(!(event->modifiers() & Qt::ControlModifier) && m_selected_quad != -1)
+                m_mesh.decale_quad(m_selected_quad, -1.0);
+        break;
+
+        case Qt::Key_Z:
+            if(!(event->modifiers() & Qt::ControlModifier) && m_selected_quad != -1 && event->modifiers() & Qt::ShiftModifier)
+                m_mesh.shrink_quad(m_selected_quad, 3/2);
+            if(!(event->modifiers() & Qt::ControlModifier) && m_selected_quad != -1 && !(event->modifiers() & Qt::ShiftModifier))
+                m_mesh.shrink_quad(m_selected_quad, 1/2);
+        break;
 			// t/T tourne
 
 			// Attention au cas m_selected_quad == -1

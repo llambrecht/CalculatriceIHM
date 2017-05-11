@@ -227,7 +227,6 @@ Vec3 MeshQuad::normal_of_quad(const Vec3& A, const Vec3& B, const Vec3& C, const
 
     Vec3 res = Vec3((v1.x + v2.x)/2,(v1.y + v2.y)/2,(v1.z + v2.z)/2);
 
-    qDebug() << res.x;
 
     return(normalize(res));
 
@@ -406,14 +405,39 @@ void MeshQuad::extrude_quad(int q)
 	// calcul de la normale
     Vec3 N = normal_of_quad(p1,p2,p3,p4);
 
-
 	// calcul de la hauteur
+    float h = sqrt((double)area_of_quad(p1,p2,p3,p4));
 
 	// calcul et ajout des 4 nouveaux points
+    Vec3 n1 = p1 + (h*N);
+    Vec3 n2 = p2 + (h*N);
+    Vec3 n3 = p3 + (h*N);
+    Vec3 n4 = p4 + (h*N);
 
-	// on remplace le quad initial par le quad du dessu
+    int in1 = add_vertex(n1);
+    int in2 = add_vertex(n2);
+    int in3 = add_vertex(n3);
+    int in4 = add_vertex(n4);
+
+
+
+    // on remplace le quad initial par le quad du dessu
+    m_quad_indices.at(q*4) = in1;
+    m_quad_indices.at(q*4+1) = in2;
+    m_quad_indices.at(q*4+2) = in3;
+    m_quad_indices.at(q*4+3) = in4;
+    //add_quad(i1,i2,i3,i4);
+
 
 	// on ajoute les 4 quads des cotes
+    add_quad(in2,i2,i3,in3);
+    add_quad(i1,i2,in2,in1);
+    add_quad(in4,i4,i1,in1);
+    add_quad(in4,in3,i3,i4);
+
+
+
+
 
 	gl_update();
 }
@@ -421,13 +445,38 @@ void MeshQuad::extrude_quad(int q)
 
 void MeshQuad::decale_quad(int q, float d)
 {
-	// recuperation des indices de points
+    // recuperation des indices de points
+    int i1 = m_quad_indices.at(q*4);
+    int i2 = m_quad_indices.at(q*4+1);
+    int i3 = m_quad_indices.at(q*4+2);
+    int i4 = m_quad_indices.at(q*4+3);
 
 	// recuperation des (references de) points
-
+    Vec3 p1 = m_points.at(i1);
+    Vec3 p2 = m_points.at(i2);
+    Vec3 p3 = m_points.at(i3);
+    Vec3 p4 = m_points.at(i4);
 	// calcul de la normale
+    Vec3 N = normal_of_quad(p1,p2,p3,p4);
 
 	// modification des points
+    float h = sqrt((double)area_of_quad(p1,p2,p3,p4)) * d;
+
+    Vec3 n1 = p1 + (h*N);
+    Vec3 n2 = p2 + (h*N);
+    Vec3 n3 = p3 + (h*N);
+    Vec3 n4 = p4 + (h*N);
+
+    int in1 = add_vertex(n1);
+    int in2 = add_vertex(n2);
+    int in3 = add_vertex(n3);
+    int in4 = add_vertex(n4);
+
+    m_quad_indices.at(q*4) = in1;
+    m_quad_indices.at(q*4+1) = in2;
+    m_quad_indices.at(q*4+2) = in3;
+    m_quad_indices.at(q*4+3) = in4;
+
 
 	gl_update();
 }
@@ -436,13 +485,28 @@ void MeshQuad::decale_quad(int q, float d)
 void MeshQuad::shrink_quad(int q, float s)
 {
 	// recuperation des indices de points
+    int i1 = m_quad_indices.at(q*4);
+    int i2 = m_quad_indices.at(q*4+1);
+    int i3 = m_quad_indices.at(q*4+2);
+    int i4 = m_quad_indices.at(q*4+3);
 
 	// recuperation des (references de) points
+    Vec3 p1 = m_points.at(i1);
+    Vec3 p2 = m_points.at(i2);
+    Vec3 p3 = m_points.at(i3);
+    Vec3 p4 = m_points.at(i4);
 
 	// ici  pas besoin de passer par une matrice
 	// calcul du centre
+    Vec3 ctr = p1+p2+p3+p4;
+    ctr.x = ctr.x / 4;
+    ctr.y = ctr.y / 4;
+    ctr.z = ctr.z / 4;
 
 	 // modification des points
+
+
+
 
 	gl_update();
 }
